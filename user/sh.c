@@ -74,6 +74,18 @@ runcmd(struct cmd *cmd)
 
   case EXEC:
     ecmd = (struct execcmd*)cmd;
+    if(ecmd->argv[0] == 0 && strcmp(ecmd->argv[0] , "!" ) == 0){
+      char *msg = ecmd->argv;
+      
+      while (*msg == ' ') msg++;
+
+      if (strstr(msg, "os") != 0) {
+          fprintf(1, "\x1b[34m%s\x1b[0m\n", msg);  
+      } else {
+          fprintf(1, "%s\n", msg);  
+      }
+      exit(0)
+    }
     if(ecmd->argv[0] == 0)
       exit(1);
     exec(ecmd->argv[0], ecmd->argv);
@@ -134,7 +146,7 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  write(2, "$ ", 2);
+  write(2, "$yazdan-negar ", 2);
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
